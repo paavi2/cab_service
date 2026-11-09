@@ -1,0 +1,151 @@
+bookings/templates/bookings/base.html
+  s_3f1df9cd900f5c::t_f5e5ab27959f4f 1-22
+bookings/templates/bookings/confirmation.html
+  s_3f1df9cd900f5c::t_5af0f3c3a4c907 8,13-19
+  s_3f1df9cd900f5c::t_01f7f3b63f8407 1,3-7,20-21
+  s_3f1df9cd900f5c::t_a2031f9930230d 11-12
+  s_3f1df9cd900f5c::t_7ed02591ffe55c 2,9-10
+bookings/models.py
+  s_3f1df9cd900f5c::t_3ff342c39eb87f 79
+  s_3f1df9cd900f5c::t_f488cd07167190 3,27-30,33,103-106,109-110,113-150,152-154,160,188,194-195,199-200,202-203,205-206,231-234,236,271-295
+  s_3f1df9cd900f5c::t_9e87ee0d3a27f6 193,201,219-220
+  s_3f1df9cd900f5c::t_f1cebf46cbe0a0 111-112,237
+  s_3f1df9cd900f5c::t_ef62c26bf26efc 107-108
+  s_3f1df9cd900f5c::t_01f7f3b63f8407 1-2,4-26,31-32,34-74,81-96,98,151,156,162-174,178-182,184-187,189-191,204,207-215,245-270,296-329
+  s_3f1df9cd900f5c::t_e71008fb473218 75-78,80,97,99-102,155,157-159,161,175-177,183,192,216-218,221-230,239-240
+  s_3f1df9cd900f5c::t_2ec1b0e75f8e4b 196-198,235,238
+  s_3f1df9cd900f5c::t_896c39fd022021 241-244
+bookings/templates/bookings/home.html
+  s_3f1df9cd900f5c::t_d10ea8568c3560 6,12-13,19,25,30,35,41,56-58
+  s_3f1df9cd900f5c::t_b909cfeb5527a7 1-5,7-11,14-18,20-24,26-29,31-34,36-40,42-55,59-64
+bookings/templates/bookings/car_results.html
+  s_3f1df9cd900f5c::t_9434031ee746b8 40,61
+  s_3f1df9cd900f5c::t_7ed02591ffe55c 57
+  s_3f1df9cd900f5c::t_84d1811a211a9c 62
+  s_3f1df9cd900f5c::t_679a6e0a66cb9e 1,3-10,12-13,15-16,41-53,64-65,67,69,72-78,104
+  s_3f1df9cd900f5c::t_e823b93c61d613 2
+  s_3f1df9cd900f5c::t_5af0f3c3a4c907 11
+  s_3f1df9cd900f5c::t_d10ea8568c3560 14,17-39,54-56,58-60,63,66,68,70-71,79-103
+README.md
+  s_3f1df9cd900f5c::t_ef62c26bf26efc 33
+  s_3f1df9cd900f5c::t_5a0d230b6c8aaa 1-32,34
+bookings/views.py
+  s_3f1df9cd900f5c::t_e7584ab2e48a57 1,4-7,9-11,22-29,32-48,50-58,99-104,112-124,131-140,146-160,162-164,166,177-199,215-233,237-249
+  s_3f1df9cd900f5c::t_9e87ee0d3a27f6 167
+  s_3f1df9cd900f5c::t_896c39fd022021 84,170,210
+  s_3f1df9cd900f5c::t_faead6001a5ec0 3,8,12-21,49,59-64,67-83,85-98,105-110,125-129,142,165,169,173-175,206,208-209,234-236,250-382
+  s_3f1df9cd900f5c::t_52218a9ddb374c 200-204,214
+  s_3f1df9cd900f5c::t_f1cebf46cbe0a0 145,172
+  s_3f1df9cd900f5c::t_f59ae7164712a1 2,30-31
+  s_3f1df9cd900f5c::t_7d2f22e67032ef 65-66,111,130,141,143-144,161,168,171,176,205,207,212-213
+  s_3f1df9cd900f5c::t_5af0f3c3a4c907 211
+docs/PRD.md
+  s_3f1df9cd900f5c::t_ef62c26bf26efc 73
+  s_3f1df9cd900f5c::t_ccfa4ce1b2db9c 1-52,57,63-72,75-85,91,93-125,136,145-162,168,171-218,220-234,236-261
+  s_3f1df9cd900f5c::t_3ff342c39eb87f 54-56,74,86,126-130,163,165,167,235
+  s_3f1df9cd900f5c::t_f8b1fbd33e67bf 164
+  s_3f1df9cd900f5c::t_5a0d230b6c8aaa 53,58-62,87-90,92,131-135,137-144,166,169-170,219
+bookings/templates/bookings/my_bookings_list.html
+  s_3f1df9cd900f5c::t_5af0f3c3a4c907 1-20,22-42
+  s_3f1df9cd900f5c::t_7ed02591ffe55c 21
+bookings/forms.py
+  s_3f1df9cd900f5c::t_262a12b1dcbb10 1-71,73-75,77-83,85-88,90-91,93-104
+  s_3f1df9cd900f5c::t_23312546074ea2 72,89
+  s_3f1df9cd900f5c::t_faead6001a5ec0 76,84,92,105-138
+bookings/templatetags/booking_terms.py
+  s_3f1df9cd900f5c::t_d1bce44f700074 1-8
+bookings/migrations/0009_booking_luggage_carrier_requested_and_more.py
+  s_3f1df9cd900f5c::t_496a2e5b379c8c 1-61
+bookings/migrations/0008_seed_local_trip_settings.py
+  s_3f1df9cd900f5c::t_4a55f1b9f25863 1-19
+bookings/admin.py
+  s_3f1df9cd900f5c::t_d10ea8568c3560 2-3,8,12-16,18-31,80-81
+  s_3f1df9cd900f5c::t_01f7f3b63f8407 1,4-7,9-11,32-63,68-70,75-79,82-97
+  s_3f1df9cd900f5c::t_23312546074ea2 17,67
+  s_3f1df9cd900f5c::t_5a0d230b6c8aaa 64
+  s_3f1df9cd900f5c::t_3ff342c39eb87f 66
+  s_3f1df9cd900f5c::t_f5e5ab27959f4f 65,71,73-74
+  s_3f1df9cd900f5c::t_df6f82fe604b93 72
+bookings/services.py
+  s_3f1df9cd900f5c::t_ccfa4ce1b2db9c 119-121
+  s_3f1df9cd900f5c::t_01f7f3b63f8407 1-115,117,123-130
+  s_3f1df9cd900f5c::t_bfee7e11faf20c 116,118,122
+  s_3f1df9cd900f5c::t_45cb85f118271a 131-220
+bookings/templates/bookings/booking_form.html
+  s_3f1df9cd900f5c::t_5af0f3c3a4c907 9
+  s_3f1df9cd900f5c::t_d1bce44f700074 2,11,13,19-20,22
+  s_3f1df9cd900f5c::t_d10ea8568c3560 14,21
+  s_3f1df9cd900f5c::t_01f7f3b63f8407 1,3-5,15-18,23-26
+  s_3f1df9cd900f5c::t_226cfaaeb23dcc 6-8,10,12
+bookings/static/bookings/css/site.css
+  s_3f1df9cd900f5c::t_b53b74562495a7 1-26,28-134
+  s_3f1df9cd900f5c::t_bfee7e11faf20c 27
+  s_3f1df9cd900f5c::t_71cabd8e3349b3 135-180
+docs/HLD.md
+  s_3f1df9cd900f5c::t_9e87ee0d3a27f6 135
+  s_3f1df9cd900f5c::t_df6f82fe604b93 63-64,66,70
+  s_3f1df9cd900f5c::t_ef62c26bf26efc 134
+  s_3f1df9cd900f5c::t_3ff342c39eb87f 54,65,67
+  s_3f1df9cd900f5c::t_5a0d230b6c8aaa 53,55,68-69,95,125-126
+  s_3f1df9cd900f5c::t_ccfa4ce1b2db9c 1-52,56-62,71-94,96-124,127-133,136-138
+bookings/urls.py
+  s_3f1df9cd900f5c::t_f59ae7164712a1 1-16
+bookings/templatetags/__init__.py
+  s_3f1df9cd900f5c::t_d1bce44f700074 1
+bookings/migrations/0010_alter_localtripsettings_local_exclusions_and_more.py
+  s_3f1df9cd900f5c::t_0b684da1d76045 1-36
+bookings/migrations/0002_booking_address_landmarks.py
+  s_3f1df9cd900f5c::t_ccfa4ce1b2db9c 1-20
+.env.example
+  s_3f1df9cd900f5c::t_7d560b7d212735 1-7
+bookings/apps.py
+  s_3f1df9cd900f5c::t_9d8b5022a6a650 1-6
+bookings/management/commands/purge_expired_booking_data.py
+  s_3f1df9cd900f5c::t_caded113a0c9c3 1-47
+bookings/migrations/0001_initial.py
+  s_3f1df9cd900f5c::t_8782623d7583c4 1-126
+bookings/migrations/0003_booking_actual_distance_km_and_more.py
+  s_3f1df9cd900f5c::t_269716eaa12e25 1-49
+bookings/migrations/0004_booking_quoted_minimum_km_and_more.py
+  s_3f1df9cd900f5c::t_ede7411d1c8569 1-29
+bookings/migrations/0005_customeraccesschallenge_booking_cancellation_charge_and_more.py
+  s_3f1df9cd900f5c::t_ccde3bb7527f05 1-49
+bookings/migrations/0006_customeraccesssendattempt.py
+  s_3f1df9cd900f5c::t_9f14e85f970bd4 1-25
+bookings/migrations/0007_localtripsettings_booking_actual_waiting_hours_and_more.py
+  s_3f1df9cd900f5c::t_3e750a46d79cb7 1-93
+bookings/templates/bookings/my_bookings_otp.html
+  s_3f1df9cd900f5c::t_74322d29d82a64 1-19
+bookings/templates/bookings/my_bookings_phone.html
+  s_3f1df9cd900f5c::t_2e20bf95110df2 1-15
+bookings/templates/bookings/verify_otp.html
+  s_3f1df9cd900f5c::t_16dadc2f48c310 1-13
+cab_service/asgi.py
+  s_3f1df9cd900f5c::t_f72f289b4f9050 1-5
+cab_service/settings.py
+  s_3f1df9cd900f5c::t_fef0849d1306a9 1-89
+cab_service/urls.py
+  s_3f1df9cd900f5c::t_8b5ce10805f214 1-12
+cab_service/wsgi.py
+  s_3f1df9cd900f5c::t_25a300eb88e94d 1-5
+manage.py
+  s_3f1df9cd900f5c::t_ea318e1465be49 1-9
+requirements.txt
+  s_3f1df9cd900f5c::t_57eab7550d8c92 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "9e0713a174a77403ed907f61f7d51bfb293c0906",
+  "prompts": {},
+  "sessions": {
+    "s_3f1df9cd900f5c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bef5-f6e6-7f53-8f31-0e33fee5fda5",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Pavithra P <Pavithra.P@jiostar.com>"
+    }
+  }
+}
