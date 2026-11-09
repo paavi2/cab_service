@@ -1,0 +1,19 @@
+{% extends 'bookings/base.html' %}
+{% block title %}Verify mobile number{% endblock %}
+{% block content %}
+<section class="portal-card">
+  <p class="eyebrow">Customer portal</p>
+  <h1>Verify your mobile number</h1>
+  <p>Enter the six-digit code sent to {{ challenge.phone_number }}. It expires in five minutes.</p>
+  {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" class="form-card portal-form">
+    {% csrf_token %}
+    {% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}<span class="required-mark" aria-hidden="true">*</span></label>{{ field }}{% if field.errors %}<div class="error" role="alert">{{ field.errors }}</div>{% endif %}</div>{% endfor %}
+    <button class="button" type="submit">Verify and view bookings</button>
+  </form>
+  <form method="post" class="inline-form">
+    {% csrf_token %}<input type="hidden" name="action" value="resend">
+    <button class="text-button" type="submit">Send a new code</button>
+  </form>
+</section>
+{% endblock %}

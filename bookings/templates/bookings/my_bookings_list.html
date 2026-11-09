@@ -1,0 +1,42 @@
+{% extends 'bookings/base.html' %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<section class="customer-bookings">
+  <div class="customer-bookings-heading">
+    <div><p class="eyebrow">Customer portal</p><h1>My Bookings</h1></div>
+    <form method="post" action="{% url 'my_bookings_logout' %}">{% csrf_token %}<button class="text-button" type="submit">Sign out</button></form>
+  </div>
+  {% if rows %}
+    <div class="customer-bookings-list">
+      {% for row in rows %}
+      <article class="customer-booking-card">
+        <div class="customer-booking-heading">
+          <div><p class="eyebrow">{{ row.booking.reference }}</p><h2>{{ row.booking.pickup_location }} → {{ row.booking.destination_location }}</h2></div>
+          <span class="booking-status">{{ row.customer_status }}</span>
+        </div>
+        <dl class="customer-booking-meta">
+          <div><dt>Pickup</dt><dd>{{ row.booking.requested_at|date:'d M Y, g:i A' }}</dd></div>
+          <div><dt>Trip</dt><dd>{{ row.booking.get_trip_type_display }}</dd></div>
+          <div><dt>Vehicle</dt><dd>{{ row.booking.vehicle.name }}</dd></div>
+          {% if row.booking.quoted_amount %}<div><dt>{% if row.booking.trip_type == 'local' %}{{ row.booking.quoted_label }}{% else %}Minimum fare{% endif %}</dt><dd>{{ row.booking.quoted_currency }} {{ row.booking.quoted_amount|floatformat:2 }}</dd></div>{% endif %}
+        </dl>
+        {% if row.booking.status == 'new' or row.booking.status == 'contacted' %}<p class="booking-next-step">The owner will confirm your booking within 12 hours. After confirmation, they’ll contact you to arrange a 10% advance.</p>{% endif %}
+        {% if row.booking.cancellation_charge %}<p class="policy-callout">₹{{ row.booking.cancellation_charge|floatformat:0 }} cancellation charge will be deducted from the advance paid.</p>{% endif %}
+        {% if row.can_cancel %}
+          {% if row.charge_if_cancelled %}
+            <p class="policy-callout">If you cancel now, ₹300 will be deducted from the advance paid.</p>
+          {% else %}
+            <p class="muted">Cancel more than 24 hours before pickup to avoid the ₹300 cancellation charge.</p>
+          {% endif %}
+          <form method="post" action="{% url 'cancel_customer_booking' row.booking.id %}" onsubmit="return confirm('Cancel this booking?');">
+            {% csrf_token %}<button class="button button-secondary" type="submit">Cancel booking</button>
+          </form>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-results"><h2>No recent bookings</h2><p>There are no bookings associated with this verified mobile number.</p><a class="button" href="{% url 'home' %}">Book a cab</a></div>
+  {% endif %}
+</section>
+{% endblock %}

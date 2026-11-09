@@ -1,0 +1,104 @@
+{% extends 'bookings/base.html' %}
+{% load booking_terms %}
+{% block title %}Choose your cab{% endblock %}
+{% block content %}
+<section class="journey-summary">
+  <div>
+    <p class="eyebrow">Available vehicles</p>
+    <h1>{{ trip.pickup_location }} <span aria-hidden="true">→</span> {{ trip.destination_location }}</h1>
+  </div>
+  <dl class="journey-meta">
+    <div><dt>Trip type</dt><dd>{% if trip.trip_type == 'local' %}Local{% elif trip.trip_type == 'round_trip' %}Round trip{% else %}One way{% endif %}</dd></div>
+    <div><dt>Pick-up</dt><dd>{{ trip.requested_at|date:'d-m-Y' }} · {{ trip.requested_at|time:'g:i A' }}</dd></div>
+    {% if trip.return_at %}<div><dt>Return</dt><dd>{{ trip.return_at|date:'d-m-Y' }} · {{ trip.return_at|time:'g:i A' }}</dd></div>{% endif %}
+    <div><button class="modify-trip-button" type="button" id="open-trip-dialog">Modify trip</button></div>
+  </dl>
+</section>
+<dialog class="trip-dialog" id="trip-dialog" aria-labelledby="trip-dialog-title">
+  <div class="trip-dialog-heading">
+    <h2 id="trip-dialog-title">Modify your trip</h2>
+    <button class="dialog-close" type="button" aria-label="Close" data-close-trip-dialog>×</button>
+  </div>
+  <form method="post" class="trip-search modify-trip-form" action="{% url 'home' %}">
+    {% csrf_token %}
+    {% if search_form.non_field_errors %}<div class="error" role="alert">{{ search_form.non_field_errors }}</div>{% endif %}
+    <p class="field-caption">Trip type<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></p>
+    <div class="trip-tabs" role="radiogroup" aria-label="Trip type" aria-required="true">
+      {% for radio in search_form.trip_type %}<label class="trip-tab">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}
+      <span class="trip-tab unavailable" aria-disabled="true">Airport <small>Later</small></span>
+    </div>
+    <div class="search-fields">
+      <div class="search-field"><label for="{{ search_form.pickup_location.id_for_label }}">From<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></label>{{ search_form.pickup_location }}{% if search_form.pickup_location.errors %}<div class="error" role="alert">{{ search_form.pickup_location.errors }}</div>{% endif %}</div>
+      <span class="route-arrow" aria-hidden="true">→</span>
+      <div class="search-field"><label for="{{ search_form.destination_location.id_for_label }}">To<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></label>{{ search_form.destination_location }}{% if search_form.destination_location.errors %}<div class="error" role="alert">{{ search_form.destination_location.errors }}</div>{% endif %}</div>
+      <div class="search-field"><label for="{{ search_form.requested_at.id_for_label }}">Pick-up date and time<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></label>{{ search_form.requested_at }}{% if search_form.requested_at.errors %}<div class="error" role="alert">{{ search_form.requested_at.errors }}</div>{% endif %}</div>
+      <div class="search-field return-field" id="dialog-return-field"><label for="{{ search_form.return_at.id_for_label }}">Return date and time<span class="required-mark" id="dialog-return-required-mark" aria-hidden="true" hidden>*</span><span class="visually-hidden"> required when round trip</span></label>{{ search_form.return_at }}{% if search_form.return_at.errors %}<div class="error" role="alert">{{ search_form.return_at.errors }}</div>{% endif %}</div>
+    </div>
+    <button class="button search-button" type="submit">Update search</button>
+  </form>
+</dialog>
+<div class="result-note"><strong>Fare information</strong><span>{% if trip.trip_type == 'local' %}Package fare includes {{ local_settings.local_inclusions|linebreaksbr }}. Extra kilometres, waiting charges, and extra luggage are excluded.{% else %}Minimum fare is shown. The final distance-based fare uses actual kilometres travelled. Driver beta, tolls, and GST are charged separately.{% endif %}</span></div>
+{% if messages %}{% for message in messages %}<p class="notice">{{ message }}</p>{% endfor %}{% endif %}
+<section class="result-list" aria-label="Vehicle options">
+  {% for item in vehicles %}
+  <article class="result-card">
+    <div class="result-photo">
+      {% if item.vehicle.photo %}
+        {% if item.vehicle.photo_small %}<img src="{{ item.vehicle.photo_small.url }}" srcset="{{ item.vehicle.photo_small.url }} 480w, {{ item.vehicle.photo.url }} 960w" sizes="(max-width: 700px) 100vw, 280px" alt="{{ item.vehicle.name }}" width="480" height="300" loading="lazy">{% else %}<img src="{{ item.vehicle.photo.url }}" alt="{{ item.vehicle.name }}" width="480" height="300" loading="lazy">{% endif %}
+      {% else %}<div class="photo-placeholder" aria-label="Vehicle photo not yet added">Vehicle photo</div>{% endif %}
+    </div>
+    <div class="result-details">
+      <h2>{{ item.vehicle.name }}</h2>
+      <p class="vehicle-capacity">{{ item.vehicle.passenger_capacity }} passengers · {{ item.vehicle.luggage_capacity }} bags</p>
+      {% if item.vehicle.description %}<p>{{ item.vehicle.description }}</p>{% endif %}
+      {% if trip.trip_type == 'local' %}
+        <p class="included-distance">{{ item.package.duration_hours }} hours · {{ item.minimum_km }} km included</p>
+        <p class="per-km-rate">{{ item.price.currency }} {{ item.rate }}/km <span>for distance beyond the package</span></p>
+        <details class="fare-details"><summary>Inclusions and exclusions</summary><div class="fare-term-columns"><div><h3>Included</h3><ul class="included-terms">{% for term in local_settings.local_inclusions|split_lines %}<li>{{ term }}</li>{% endfor %}</ul></div><div><h3>Excluded</h3><ul class="excluded-terms">{% for term in local_settings.local_exclusions|split_lines %}<li>{{ term }}</li>{% endfor %}<li>Beyond {{ item.minimum_km }} km: ₹{{ local_settings.local_extra_km_rate }}/km</li><li>Waiting: ₹{{ item.waiting_rate }}/hour</li><li>Carrier luggage: ₹{{ local_settings.luggage_carrier_charge }}</li></ul></div></div></details>
+      {% else %}
+        <p class="included-distance">{{ item.minimum_km }} km minimum</p>
+        <p class="per-km-rate">{{ item.price.currency }} {{ item.rate }}/km <span>{% if trip.trip_type == 'round_trip' %}round-trip rate (₹1/km below one-way){% else %}one-way rate{% endif %}</span></p>
+        {% if trip.trip_type == 'one_way' %}<p class="vehicle-capacity">Waiting charge: ₹{{ item.waiting_rate }}/hour</p>{% endif %}
+        <details class="fare-details"><summary>Fare inclusions and exclusions</summary><p>Minimum fare covers {{ item.minimum_km }} km. Final fare uses actual kilometres travelled. Driver beta, tolls, and GST are charged separately.{% if trip.trip_type == 'one_way' %} Waiting is charged at ₹{{ item.waiting_rate }}/hour.{% endif %}</p></details>
+      {% endif %}
+    </div>
+    <div class="result-price">
+      <p class="price-caption">{% if trip.trip_type == 'local' %}{{ item.package.name }}{% else %}Minimum fare{% endif %}</p>
+      <strong>{{ item.price.currency }} {{ item.minimum_fare|floatformat:2 }}</strong>
+      <small>{% if trip.trip_type == 'local' %}Extra km and waiting charges may apply{% else %}Final amount depends on actual km{% endif %}</small>
+      <form method="post" action="{% url 'choose_vehicle' %}">
+        {% csrf_token %}<input type="hidden" name="vehicle_id" value="{{ item.vehicle.id }}">{% if item.package %}<input type="hidden" name="package_id" value="{{ item.package.id }}">{% endif %}
+        <button class="button select-car" type="submit">Confirm details</button>
+      </form>
+    </div>
+  </article>
+  {% empty %}
+  <div class="empty-results"><h2>No priced vehicles available yet</h2><p>Please check back later or contact us to request a cab.</p><a href="{% url 'home' %}">Change trip</a></div>
+  {% endfor %}
+</section>
+
+<script>
+  (() => {
+    const dialog = document.getElementById("trip-dialog");
+    const openButton = document.getElementById("open-trip-dialog");
+    const returnField = document.getElementById("dialog-return-field");
+    if (!dialog || !openButton) return;
+    openButton.addEventListener("click", () => dialog.showModal());
+    dialog.querySelectorAll("[data-close-trip-dialog]").forEach((button) => {
+      button.addEventListener("click", () => dialog.close());
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    const tripInputs = dialog.querySelectorAll('input[name="trip_type"]');
+    const updateReturnField = () => {
+      const selected = dialog.querySelector('input[name="trip_type"]:checked');
+      const isRoundTrip = selected && selected.value === "round_trip";
+      returnField.hidden = !isRoundTrip;
+      document.getElementById("dialog-return-required-mark").hidden = !isRoundTrip;
+    };
+    tripInputs.forEach((input) => input.addEventListener("change", updateReturnField));
+    updateReturnField();
+  })();
+</script>
+{% endblock %}

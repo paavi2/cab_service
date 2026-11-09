@@ -1,0 +1,21 @@
+{% extends 'bookings/base.html' %}
+{% load booking_terms %}
+{% block title %}Booking request received{% endblock %}
+{% block content %}
+<section class="confirmation">
+  <p class="eyebrow">Request received</p>
+  <h1>Thanks, {{ booking.customer_name }}.</h1>
+  <p>Your booking request <strong>{{ booking.reference }}</strong> has status <strong>{% if booking.status == 'accepted' %}Confirmed{% elif booking.status == 'cancelled' %}Cancelled{% elif booking.status == 'rejected' %}Not confirmed{% elif booking.status == 'completed' %}Completed{% else %}Booked{% endif %}</strong>. We will contact you at {{ booking.phone_number }}.</p>
+  <dl><dt>Trip type</dt><dd>{{ booking.get_trip_type_display }}</dd><dt>Route</dt><dd>{{ booking.pickup_location }} → {{ booking.destination_location }}</dd><dt>Pickup address</dt><dd>{{ booking.pickup_address }}{% if booking.pickup_landmark %}<br>Landmark: {{ booking.pickup_landmark }}{% endif %}</dd><dt>Destination address</dt><dd>{{ booking.destination_address }}{% if booking.destination_landmark %}<br>Landmark: {{ booking.destination_landmark }}{% endif %}</dd><dt>Pickup time</dt><dd>{{ booking.requested_at }}</dd>{% if booking.return_at %}<dt>Return time</dt><dd>{{ booking.return_at }}</dd>{% endif %}<dt>Vehicle</dt><dd>{{ booking.vehicle.name }}</dd>{% if booking.local_package %}<dt>Package</dt><dd>{{ booking.local_package.name }} ({{ booking.quoted_minimum_km }} km included)</dd><dt>Package base fare</dt><dd>{{ booking.quoted_currency }} {{ booking.quoted_package_amount }}</dd>{% endif %}{% if booking.quoted_amount %}<dt>{{ booking.quoted_label }}</dt><dd>{{ booking.quoted_currency }} {{ booking.quoted_amount }}</dd>{% endif %}{% if booking.luggage_carrier_requested %}<dt>Carrier luggage</dt><dd>₹{{ booking.quoted_luggage_carrier_amount }}</dd>{% endif %}{% if booking.trip_type == 'local' or booking.trip_type == 'one_way' %}<dt>Waiting rate</dt><dd>₹{{ booking.quoted_waiting_rate_per_hour }}/hour</dd>{% endif %}{% if booking.trip_type == 'local' %}<dt>Extra distance rate</dt><dd>₹{{ booking.quoted_local_extra_km_rate }}/km after included distance</dd>{% endif %}</dl>
+  {% if booking.trip_type == 'local' %}<section class="fare-terms"><h2>Inclusions and exclusions</h2><div class="fare-term-columns"><div><h3>Included</h3><ul class="included-terms">{% for term in booking.quoted_inclusions|split_lines %}<li>{{ term }}</li>{% endfor %}</ul></div><div><h3>Excluded</h3><ul class="excluded-terms">{% for term in booking.quoted_exclusions|split_lines %}<li>{{ term }}</li>{% endfor %}<li>Beyond {{ booking.quoted_minimum_km }} km: ₹{{ booking.quoted_local_extra_km_rate }}/km</li><li>Waiting: ₹{{ booking.quoted_waiting_rate_per_hour }}/hour</li><li>Carrier luggage: ₹{{ booking.quoted_luggage_carrier_amount|default:'150' }}</li></ul></div></div></section>
+  {% elif booking.trip_type == 'one_way' %}<p class="muted">The amount shown is the minimum fare. The final distance-based fare is based on actual kilometres travelled. Waiting is charged at ₹{{ booking.quoted_waiting_rate_per_hour }}/hour. Driver beta, tolls, and GST are extra.</p>
+  {% else %}<p class="muted">The amount shown is the minimum fare. The final distance-based fare is calculated from actual kilometres travelled. Driver beta, tolls, and GST are extra. Round trips do not have a waiting charge.</p>{% endif %}
+  <a class="button" href="{% url 'home' %}">Return to home</a>
+  {% if booking.status == 'new' or booking.status == 'contacted' %}
+    <p class="booking-next-step">The owner will confirm your booking within 12 hours. After confirmation, they’ll contact you to arrange a 10% advance.</p>
+  {% elif booking.status == 'accepted' %}
+    <p class="booking-next-step">Your booking is confirmed. The owner will contact you to arrange a 10% advance.</p>
+  {% endif %}
+  <p class="policy-callout"><strong>Cancellation policy:</strong> If you cancel within 24 hours before the scheduled pick-up, ₹300 will be deducted from the advance paid.</p>
+</section>
+{% endblock %}

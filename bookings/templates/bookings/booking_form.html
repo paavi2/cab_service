@@ -1,0 +1,26 @@
+{% extends 'bookings/base.html' %}
+{% load booking_terms %}
+{% block title %}Book a cab{% endblock %}
+{% block content %}
+<h1>Trip details</h1>
+<p>We pick you up at your address and drop you at your destination. Add the exact addresses and a nearby landmark to help the driver find you.</p>
+<section class="selected-trip">
+  <div><span>Route</span><strong>{{ trip.pickup_location }} → {{ trip.destination_location }}</strong></div>
+  <div><span>Trip</span><strong>{{ trip_display }}</strong></div>
+  <div><span>Vehicle</span><strong>{{ vehicle.name }}</strong></div>
+  <div><span>{% if local_package %}{{ local_package.name }}{% else %}Minimum fare{% endif %}</span><strong>{{ currency }} {{ minimum_fare|floatformat:2 }}</strong><small>{% if local_package %}₹{{ rate }}/km beyond included {{ minimum_km }} km · waiting ₹{{ waiting_rate }}/hour{% else %}{{ rate }}/km · {{ minimum_km }} km minimum{% if trip.trip_type == 'one_way' %} · waiting ₹{{ waiting_rate }}/hour{% endif %}{% endif %}</small></div>
+</section>
+{% if local_package %}<section class="fare-terms"><h2>Inclusions and exclusions</h2><div class="fare-term-columns"><div><h3>Included</h3><ul class="included-terms">{% for term in local_settings.local_inclusions|split_lines %}<li>{{ term }}</li>{% endfor %}</ul></div><div><h3>Excluded</h3><ul class="excluded-terms">{% for term in local_settings.local_exclusions|split_lines %}<li>{{ term }}</li>{% endfor %}<li>Beyond {{ local_package.included_km }} km: ₹{{ local_settings.local_extra_km_rate }}/km</li><li>Waiting: ₹{{ waiting_rate }}/hour</li><li>Carrier luggage: ₹{{ luggage_carrier_charge }}</li></ul></div></div></section>{% endif %}
+<p class="policy-callout"><strong>Cancellation policy:</strong> A ₹300 cancellation charge applies if you cancel within 24 hours before the scheduled pick-up.</p>
+<form method="post" class="form-card">
+  {% csrf_token %}
+  {{ form.idempotency_key }}
+  {% if form.non_field_errors %}<div class="error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+  {% for field in form %}{% if field.name != 'idempotency_key' and field.name != 'luggage_carrier_requested' or field.name == 'luggage_carrier_requested' and local_package %}
+    {% if field.name == 'luggage_carrier_requested' %}<div class="field carrier-option"><label for="{{ field.id_for_label }}">{{ field }} {{ field.label }} (₹{{ luggage_carrier_charge }})</label>{% if field.errors %}<div class="error" role="alert">{{ field.errors }}</div>{% endif %}</div>{% else %}
+    <div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span>{% endif %}</label>{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{% if field.errors %}<div class="error" role="alert">{{ field.errors }}</div>{% endif %}</div>
+    {% endif %}
+  {% endif %}{% endfor %}
+  <button class="button" type="submit">Continue to phone verification</button>
+</form>
+{% endblock %}

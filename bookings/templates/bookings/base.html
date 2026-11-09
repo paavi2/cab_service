@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c35">
+  <title>{% block title %}Cab Service{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'bookings/css/site.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{% url 'home' %}">Cab Service</a>
+    <nav aria-label="Main navigation"><a href="{% url 'home' %}">Book a cab</a><a href="{% url 'my_bookings' %}">My Bookings</a></nav>
+  </header>
+  <main class="container">
+    {% for message in messages %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">Cab bookings are requests until confirmed by the operator.</footer>
+</body>
+</html>

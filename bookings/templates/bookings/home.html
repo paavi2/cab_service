@@ -1,0 +1,64 @@
+{% extends 'bookings/base.html' %}
+{% block title %}Cab Service — Find your cab{% endblock %}
+{% block content %}
+<section class="search-hero" aria-labelledby="hero-title">
+  <div class="hero-inner">
+  <p class="eyebrow">Doorstep pick-up · Local and outstation travel</p>
+    <h1 id="hero-title">Your journey, made simple</h1>
+    <p class="hero-copy">Choose your route and travel time. Compare vehicles and see the minimum fare before you book.</p>
+    <form method="post" class="trip-search" action="{% url 'home' %}">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+      <p class="field-caption">Trip type<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></p>
+      <div class="trip-tabs" role="radiogroup" aria-label="Trip type" aria-required="true">
+        {% for radio in form.trip_type %}<label class="trip-tab">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}
+        <span class="trip-tab unavailable" aria-disabled="true">Airport <small>Later</small></span>
+      </div>
+      <div class="search-fields">
+        <div class="search-field">
+          <label for="{{ form.pickup_location.id_for_label }}">From<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></label>
+          {{ form.pickup_location }}
+          {% if form.pickup_location.errors %}<div class="error">{{ form.pickup_location.errors }}</div>{% endif %}
+        </div>
+        <span class="route-arrow" aria-hidden="true">→</span>
+        <div class="search-field">
+          <label for="{{ form.destination_location.id_for_label }}">To<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></label>
+          {{ form.destination_location }}
+          {% if form.destination_location.errors %}<div class="error">{{ form.destination_location.errors }}</div>{% endif %}
+        </div>
+        <div class="search-field">
+          <label for="{{ form.requested_at.id_for_label }}">Pick-up date and time<span class="required-mark" aria-hidden="true">*</span><span class="visually-hidden"> required</span></label>
+          {{ form.requested_at }}
+          {% if form.requested_at.errors %}<div class="error">{{ form.requested_at.errors }}</div>{% endif %}
+        </div>
+        <div class="search-field return-field" id="return-field">
+          <label for="{{ form.return_at.id_for_label }}">Return date and time<span class="required-mark" id="home-return-required-mark" aria-hidden="true" hidden>*</span><span class="visually-hidden"> required when round trip</span></label>
+          {{ form.return_at }}
+          {% if form.return_at.errors %}<div class="error">{{ form.return_at.errors }}</div>{% endif %}
+        </div>
+      </div>
+      <button class="button search-button" type="submit">Explore cabs</button>
+      <p class="search-footnote">Local fares use an operator-configured package. Outstation fares use kilometres travelled and the minimum distance.</p>
+    </form>
+  </div>
+</section>
+<section class="trust-strip" aria-label="Our service">
+  <div><strong>Doorstep service</strong><span>Pick-up from your address</span></div>
+  <div><strong>Clear pricing</strong><span>Minimum fare shown up front</span></div>
+  <div><strong>Verified requests</strong><span>Phone verification before booking</span></div>
+</section>
+<script>
+  (() => {
+    const returnField = document.getElementById("return-field");
+    const tripInputs = document.querySelectorAll('input[name="trip_type"]');
+    const updateReturnField = () => {
+      const selected = document.querySelector('input[name="trip_type"]:checked');
+      const isRoundTrip = selected && selected.value === "round_trip";
+      returnField.hidden = !isRoundTrip;
+      document.getElementById("home-return-required-mark").hidden = !isRoundTrip;
+    };
+    tripInputs.forEach((input) => input.addEventListener("change", updateReturnField));
+    updateReturnField();
+  })();
+</script>
+{% endblock %}
